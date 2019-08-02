@@ -157,10 +157,13 @@ class ProvinceCityArea extends Component{
                 openProvinceCityArea:false,
             },()=>{
                 this.props.callback&&this.props.callback(this.state.address);
+                this.onClose()
             });
         }else{
             this.setState({
                 openProvinceCityArea:false,
+            }, () => {
+                this.onClose()
             });
         }
     }
@@ -195,6 +198,15 @@ class ProvinceCityArea extends Component{
             openProvinceCityArea:nextProps.openProvinceCityArea
         })
     }
+
+    onClose()
+    {
+        if (this.props.onClose)
+        {
+            this.props.onClose();
+        }
+    }
+
     render (){
         let selectProvinceBtn=[style.selectBtn],selectCityBtn=[style.selectBtn],selectAreaBtn=[style.selectBtn],
             selectProvinceArea=[style.selectArea],selectCityArea=[style.selectArea],selectAreaArea=[style.selectArea];
@@ -227,14 +239,23 @@ class ProvinceCityArea extends Component{
             selectAreaBtn.push(style.hide);
         }
         return <Modal transparent={true} visible={this.state.openProvinceCityArea}
-                      onRequestClose={() => this.setState({openProvinceCityArea:false})}>
+                      onRequestClose={() => this.setState({openProvinceCityArea:false}, () =>{
+                          this.onClose()
+                      })}>
                 <View style={style.sku}>
-                    <TouchableOpacity style={style.skuBackImg} onPress={() => this.setState({openProvinceCityArea:false})}></TouchableOpacity>
+                    <TouchableOpacity style={style.skuBackImg} onPress={() => this.setState({openProvinceCityArea:false}, () => {
+                        this.onClose()
+                    })}></TouchableOpacity>
                     <View style={style.openProvinceCityAreaContentWarp}>
                         <View style={style.skuTitle}>
                             <Text style={style.skuTitleTxt}>所在地区</Text>
                             <TouchableOpacity style={style.skuContentClose}
-                                              onPress={() => this.setState({openProvinceCityArea:false})}>
+                                              onPress={() => {
+                                                  this.setState({openProvinceCityArea:false}, () => {
+                                                      this.onClose()
+                                                  })
+
+                                              }}>
                                 <Text style={style.skuContentCloseIcon}>关闭</Text>
                             </TouchableOpacity>
                         </View>
